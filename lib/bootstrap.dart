@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:zego_uikit/zego_uikit.dart';
 
 import 'app.dart';
 import 'core/services/api/socket_service.dart';
@@ -72,13 +73,17 @@ Future<void> bootstrap() async {
 
         // Services
         Provider(
-          create: (_) => UserService(
-            baseUrl: dotenv.env["BASE_URL"] ?? "",
-          ),
+          create: (_) => UserService(baseUrl: dotenv.env["BASE_URL"] ?? ""),
         ),
         Provider<SocketService>.value(value: socketService),
       ],
-      child: const MyApp(),
+      child: ZegoScreenUtilInit(
+        designSize: ZegoScreenUtil.defaultSize,
+        splitScreenMode: true,
+        ensureScreenSize: true,
+        minTextAdapt: true,
+        child: const MyApp(),
+      ),
     ),
   );
 }
