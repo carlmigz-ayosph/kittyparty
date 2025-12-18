@@ -6,15 +6,28 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:zego_uikit/zego_uikit.dart';
 
 import 'app.dart';
+
+// Services
+import 'core/services/api/conversion_recharge.dart';
+import 'core/services/api/dailyTask_service.dart';
 import 'core/services/api/socket_service.dart';
 import 'core/services/api/user_service.dart';
+import 'core/services/api/wallet_service.dart';
+
+
+// Providers
 import 'core/utils/locale_provider.dart';
 import 'core/utils/user_provider.dart';
 import 'core/utils/index_provider.dart';
+
+// ViewModels
+import 'features/landing/viewmodel/dailyTask_viewmodel.dart';
+import 'features/landing/viewmodel/landing_viewmodel.dart';
 import 'features/landing/viewmodel/post_viewmodel.dart';
-import 'features/livestream/widgets/gift_assets.dart';
 import 'features/wallet/viewmodel/wallet_viewmodel.dart';
-import 'features/wallet/viewmodel/diamond_viewmodel.dart';
+
+// Assets
+import 'features/livestream/widgets/gift_assets.dart';
 
 late Box myRegBox;
 late Box sessionsBox;
@@ -34,48 +47,58 @@ Future<void> bootstrap() async {
 
   Stripe.publishableKey = dotenv.env["STRIPE_PUBLISHABLE_KEY"] ?? "";
 
-  // Load user BEFORE building widget tree
+
+
+  // 🔑 Load user BEFORE widget tree
   final userProvider = UserProvider();
   await userProvider.loadUser();
 
-  // Global socket
   final socketService = SocketService();
   if (userProvider.currentUser != null) {
-    socketService.initSocket(userProvider.currentUser!.userIdentification);
+    socketService.initSocket(userProvider.currentUser!.id);
   }
 
   runApp(
     MultiProvider(
       providers: [
+        // Locale
         ChangeNotifierProvider.value(value: localeProvider),
 
-        // User Provider
+        // Auth / User
         ChangeNotifierProvider<UserProvider>.value(value: userProvider),
 
-        // Page index
+        // Navigation
         ChangeNotifierProvider(create: (_) => PageIndexProvider()),
 
-        // NEW PostViewModel (no currentUserId parameter)
+        // Landing
+        ChangeNotifierProvider(create: (_) => LandingViewModel()),
+
+        // Posts
         ChangeNotifierProvider(
           create: (_) => PostViewModel(userProvider: userProvider),
         ),
 
-        // Wallet & Diamonds
+        // ✅ WALLET (single source of truth)
         ChangeNotifierProvider(
-          create: (_) => WalletViewModel(userProvider: userProvider),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => DiamondViewModel(
+          create: (_) => WalletViewModel(
             userProvider: userProvider,
+            walletService: WalletService(),
+            conversionService: ConversionService(),
             socketService: socketService,
           ),
         ),
 
-        // Services
+        // Daily Tasks
+        ChangeNotifierProvider(
+          create: (_) => DailyTaskViewModel(
+            DailyTaskService(),
+          ),
+        ),
+
+        // API Services
         Provider(
           create: (_) => UserService(baseUrl: dotenv.env["BASE_URL"] ?? ""),
         ),
-        Provider<SocketService>.value(value: socketService),
       ],
       child: ZegoScreenUtilInit(
         designSize: ZegoScreenUtil.defaultSize,

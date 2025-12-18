@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../core/services/api/socket_service.dart';
-import '../viewmodel/diamond_viewmodel.dart';
+import '../viewmodel/wallet_viewmodel.dart';
 import '../wallet_widgets/diamond_card.dart';
-import 'convert_diamond_page.dart';
 import '../wallet_widgets/convert_button.dart';
 
 class DiamondsPage extends StatelessWidget {
@@ -11,22 +9,20 @@ class DiamondsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DiamondViewModel>(
-      builder: (context, diamondVM, _) {
+    return Consumer<WalletViewModel>(
+      builder: (context, walletVM, _) {
+        // 🔍 DEBUG
+        print("💎 UI diamonds = ${walletVM.diamonds}");
+
         return Column(
           children: [
-            // 💎 Display current diamond balance
             DiamondCard(
-              balance: diamondVM.diamond.diamonds,
-              onConvert: () {
-                final socketService = SocketService();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ConvertCoinsPage(socketService: socketService),
-                  ),
-                );
-              },
+              balance: walletVM.diamonds, // ✅ LIVE SOURCE
+              onConvert: () {},
+            ),
+            const SizedBox(height: 35),
+            ConvertButton(
+              onPressed: () {},
             ),
             const Spacer(),
           ],
