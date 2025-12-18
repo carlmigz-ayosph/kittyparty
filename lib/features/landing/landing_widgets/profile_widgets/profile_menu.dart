@@ -10,16 +10,48 @@ class ProfileMenu extends StatelessWidget {
   ProfileMenu({super.key});
 
   final List<Map<String, dynamic>> menuItems = [
-    {'label': 'My Room', 'icon': FontAwesomeIcons.house, 'route': AppRoutes.room},
-    {'label': 'Agency', 'icon': FontAwesomeIcons.shield, 'route': '/agency'},
-    {'label': 'My Collection', 'icon': FontAwesomeIcons.star, 'route': AppRoutes.collection},
-    {'label': 'Daily Tasks', 'icon': FontAwesomeIcons.calendar, 'route': AppRoutes.tasks},
+    {
+      'label': 'My Room',
+      'icon': FontAwesomeIcons.house,
+      'route': AppRoutes.room,
+    },
+    {
+      'label': 'Agency',
+      'icon': FontAwesomeIcons.shield,
+      'route': AppRoutes.agency,
+    },
+    {
+      'label': 'My Collection',
+      'icon': FontAwesomeIcons.star,
+      'route': AppRoutes.collection,
+    },
+    {
+      'label': 'Daily Tasks',
+      'icon': FontAwesomeIcons.calendar,
+      'route': AppRoutes.tasks,
+    },
     {'label': 'My Medals', 'icon': FontAwesomeIcons.medal, 'route': '/medals'},
-    {'label': 'Invite', 'icon': FontAwesomeIcons.userPlus, 'route': AppRoutes.invite},
-    {'label': 'My Level', 'icon': FontAwesomeIcons.arrowTrendUp, 'route': AppRoutes.level},
+    {
+      'label': 'Invite',
+      'icon': FontAwesomeIcons.userPlus,
+      'route': AppRoutes.invite,
+    },
+    {
+      'label': 'My Level',
+      'icon': FontAwesomeIcons.arrowTrendUp,
+      'route': AppRoutes.level,
+    },
     {'label': 'Mall', 'icon': FontAwesomeIcons.shirt, 'route': AppRoutes.mall},
-    {'label': 'My Item', 'icon': FontAwesomeIcons.cube, 'route': AppRoutes.item},
-    {'label': 'Setting', 'icon': FontAwesomeIcons.gear, 'route': AppRoutes.setting},
+    {
+      'label': 'My Item',
+      'icon': FontAwesomeIcons.cube,
+      'route': AppRoutes.item,
+    },
+    {
+      'label': 'Setting',
+      'icon': FontAwesomeIcons.gear,
+      'route': AppRoutes.setting,
+    },
   ];
 
   final RoomService _roomService = RoomService();
@@ -67,10 +99,10 @@ class ProfileMenu extends StatelessWidget {
   }
 
   Future<void> _handleMenuTap(
-      BuildContext context,
-      Map<String, dynamic> item,
-      UserProvider userProvider,
-      ) async {
+    BuildContext context,
+    Map<String, dynamic> item,
+    UserProvider userProvider,
+  ) async {
     final String route = item['route'];
     final user = userProvider.currentUser;
 

@@ -14,6 +14,7 @@ class AppColors {
   static const Color errorColor = Color(0xFFE63946);    // Coral Red
   static const Color solidBlack = Colors.black;         // Solid Black
   static const Color accentBlack = Color(0xFF171717);
+  static const Color accentGray = Colors.white70;
   static const Color gold = Color(0xFFFFB300);
 
   /// Main gradient (Kitty Party theme)
@@ -42,6 +43,11 @@ class AppColors {
     Color(0xFF00C9FF), // Vibrant Aqua Blue
     Color(0xFF00E0FF), // Electric Cyan (adds shine)
     Color(0xFFE0F7FA), // Crystal White-Blue highlight
+  ];
+
+  static const List<Color> grayGradient = [
+    Color(0xFFB0B0B0),
+    Color(0xFFE0E0E0),
   ];
 
 
