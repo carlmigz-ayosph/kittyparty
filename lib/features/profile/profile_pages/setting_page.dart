@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kittyparty/features/profile/profile_pages/settings/VIPSettings_page.dart';
 import 'package:kittyparty/features/profile/profile_pages/settings/bind_number.dart';
+import 'package:kittyparty/features/profile/profile_pages/settings/black_list_page.dart';
+import 'package:kittyparty/features/profile/profile_pages/settings/help_center_page.dart';
 import 'package:kittyparty/features/profile/profile_pages/settings/language_page.dart';
+import 'package:kittyparty/features/profile/profile_pages/settings/notification_page.dart';
 import 'package:kittyparty/features/profile/profile_pages/settings/payment_pass_page.dart';
 import 'package:kittyparty/features/profile/profile_pages/settings/reset_pass_page.dart';
 import 'package:kittyparty/features/profile/profile_pages/settings/set_password_page.dart';
+import 'package:kittyparty/features/profile/profile_pages/settings/shield_manager_page.dart';
 import 'package:provider/provider.dart';
 
 // 🔹 Auth + Core Imports
@@ -59,9 +63,9 @@ class _SettingPageState extends State<SettingPage> {
         } catch (e) {
           if (context.mounted) {
             Navigator.of(context, rootNavigator: true).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Logout failed: $e")),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Logout failed: $e")));
           }
         } finally {
           if (mounted) setState(() => _isLoggingOut = false);
@@ -69,7 +73,6 @@ class _SettingPageState extends State<SettingPage> {
       },
     ).build(context);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +139,9 @@ class _SettingPageState extends State<SettingPage> {
                     trailingText: user?.email ?? 'No email',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const SetPasswordPage()),
+                      MaterialPageRoute(
+                        builder: (_) => const SetPasswordPage(),
+                      ),
                     ),
                   ),
                   _buildItem(
@@ -151,13 +156,16 @@ class _SettingPageState extends State<SettingPage> {
                       MaterialPageRoute(builder: (_) => const BindNumberPage()),
                     ),
                   ),
-                  if (user?.loginMethod?.toLowerCase() != 'google') // Disable reset for Google login
+                  if (user?.loginMethod?.toLowerCase() !=
+                      'google') // Disable reset for Google login
                     _buildItem(
-                      (user?.passwordHash != null && user!.passwordHash!.isNotEmpty)
+                      (user?.passwordHash != null &&
+                              user!.passwordHash!.isNotEmpty)
                           ? 'Reset Password'
                           : 'Set Password',
                       onTap: () {
-                        final hasPassword = user?.passwordHash != null &&
+                        final hasPassword =
+                            user?.passwordHash != null &&
                             user!.passwordHash!.isNotEmpty;
 
                         Navigator.push(
@@ -175,7 +183,9 @@ class _SettingPageState extends State<SettingPage> {
                     trailingText: 'Modify',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const PaymentPassPage()),
+                      MaterialPageRoute(
+                        builder: (_) => const PaymentPassPage(),
+                      ),
                     ),
                   ),
                 ]),
@@ -186,10 +196,20 @@ class _SettingPageState extends State<SettingPage> {
                     'VIP Setting',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const VIPSettingsPage()),
+                      MaterialPageRoute(
+                        builder: (_) => const VIPSettingsPage(),
+                      ),
                     ),
                   ),
-                  _buildItem('Notification Setting', onTap: () {}),
+                  _buildItem(
+                    'Notification Setting',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const NotificationPage(),
+                      ),
+                    ),
+                  ),
                   _buildItem(
                     'Language',
                     onTap: () => Navigator.push(
@@ -201,14 +221,37 @@ class _SettingPageState extends State<SettingPage> {
 
                 // 🔹 Privacy / Management Group
                 _buildGroup([
-                  _buildItem('Shield Manager', onTap: () {}),
-                  _buildItem('Blacklist Management', onTap: () {}),
+                  _buildItem(
+                    'Shield Manager',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ShieldManagerPage(),
+                      ),
+                    ),
+                  ),
+                  _buildItem(
+                    'Blacklist Management',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const BlackListPage()),
+                    ),
+                  ),
                 ]),
 
                 // 🔹 Info / Support Group
                 _buildGroup([
-                  _buildItem('Personal Information and Permissions', onTap: () {}),
-                  _buildItem('Help', onTap: () {}),
+                  _buildItem(
+                    'Personal Information and Permissions',
+                    onTap: () {},
+                  ),
+                  _buildItem(
+                    'Help',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HelpCenterPage()),
+                    ),
+                  ),
                   _buildItem('Clear Cache', onTap: () {}),
                   _buildItem('About KittyParty', onTap: () {}),
                 ]),
@@ -270,10 +313,7 @@ class _SettingPageState extends State<SettingPage> {
           if (trailingText != null)
             Text(
               trailingText,
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
           const Icon(Icons.chevron_right, color: Colors.grey),
         ],
